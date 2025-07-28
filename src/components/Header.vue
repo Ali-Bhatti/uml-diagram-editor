@@ -11,7 +11,7 @@
     <div class="header-right">
       <button class="btn btn-secondary" @click="diagramStore.saveDiagram" :disabled="!currentDiagram">Save</button>
       <button class="btn btn-danger" @click="deleteCurrentDiagram" :disabled="!currentDiagram">Delete</button>
-      <button class="btn btn-primary" @click="diagramStore.showNewDiagramModal">New Diagram</button>
+      <button class="btn btn-primary" @click="showNewDiagramModal">New Diagram</button>
     </div>
   </header>
 </template>
@@ -22,6 +22,10 @@ import { useDiagramStore } from '../stores/diagramStore'
 
 const diagramStore = useDiagramStore()
 const { diagrams, currentDiagram } = storeToRefs(diagramStore)
+
+function showNewDiagramModal() {
+  diagramStore.showNewDiagramModal()
+}
 
 function onDiagramSelect(event) {
   diagramStore.loadDiagram(event.target.value)

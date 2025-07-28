@@ -5,7 +5,7 @@
       <Palette />
       <DiagramCanvas />
     </main>
-    <NewDiagramModal v-if="isNewDiagramModalVisible" />
+    <NewDiagramModal v-if="isNewDiagramModalVisible" @close="hideNewDiagramModal" />
     <EditNodeModal v-if="isEditNodeModalVisible" />
   </div>
 </template>
@@ -20,5 +20,15 @@ import { storeToRefs } from 'pinia'
 import { useDiagramStore } from './stores/diagramStore'
 
 const diagramStore = useDiagramStore()
-const { isNewDiagramModalVisible, isEditNodeModalVisible } = storeToRefs(diagramStore)
+
+const {
+  isNewDiagramModalVisible,
+  isEditNodeModalVisible,
+  editingNode,
+} = storeToRefs(diagramStore)
+
+const {
+  hideNewDiagramModal,
+  hideEditNodeModal,
+} = diagramStore
 </script>

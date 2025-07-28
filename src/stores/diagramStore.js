@@ -42,6 +42,10 @@ export const useDiagramStore = defineStore('diagram', () => {
     saveToLocalStorage()
   }
 
+  function isDiagramNameUnique(name) {
+    return diagrams.value.every(d => d.name !== name)
+  }
+
   function loadDiagram(id) {
     const diagram = diagrams.value.find(d => d.id === id)
     if (diagram) {
@@ -158,5 +162,6 @@ export const useDiagramStore = defineStore('diagram', () => {
     hideNewDiagramModal,
     showEditNodeModal,
     hideEditNodeModal,
+    isDiagramNameUnique,
   }
 })

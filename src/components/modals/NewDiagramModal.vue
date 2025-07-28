@@ -15,7 +15,7 @@
           </select>
         </div>
         <div class="form-actions">
-          <button type="button" class="btn btn-secondary" @click="diagramStore.hideNewDiagramModal()">Cancel</button>
+          <button type="button" class="btn btn-secondary" @click="$emit('close')">Cancel</button>
           <button type="submit" class="btn btn-primary">Create Diagram</button>
         </div>
       </form>
@@ -33,14 +33,14 @@ const type = ref('usecase')
 
 const show = computed(() => diagramStore.showNewDiagramModal)
 
-const closeModal = () => {
-  diagramStore.showNewDiagramModal = false
-}
-
 const create = () => {
+  if (!diagramStore.isDiagramNameUnique(name.value)) {
+    alert('Diagram name must be unique')
+    return
+  }
   diagramStore.createDiagram(name.value, type.value)
   name.value = ''
   type.value = 'usecase'
-  closeModal()
+  diagramStore.hideNewDiagramModal()
 }
 </script>
