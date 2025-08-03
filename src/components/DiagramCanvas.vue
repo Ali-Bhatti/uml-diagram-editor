@@ -142,6 +142,10 @@ function onDrop(event) {
 
 
 function onNodeDoubleClick(event) {
+  let editableNodes = ['action', 'decision', 'merge']
+  if (!editableNodes.includes(event.node.type)) {
+    return
+  }
   diagramStore.showEditNodeModal(event.node)
 }
 function onEdgeDoubleClick(event) {
