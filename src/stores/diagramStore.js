@@ -9,6 +9,7 @@ export const useDiagramStore = defineStore('diagram', () => {
   const isNewDiagramModalVisible = ref(false)
   const isEditNodeModalVisible = ref(false)
   const editingNode = ref(null)
+  const edgeToEdit = ref(null)
   let nextNodeId = ref(1)
 
   // Vue Flow's state (nodes, edges, etc.)
@@ -62,15 +63,15 @@ export const useDiagramStore = defineStore('diagram', () => {
         id: n.id?.toString() ?? '',
         type: n.type ?? 'default',
         position: n.position && typeof n.position.x === 'number' && typeof n.position.y === 'number'
-        ? n.position
-        : { x: 0, y: 0 },
+          ? n.position
+          : { x: 0, y: 0 },
         data: n.data ?? { label: '' },
         ...n,
       }))
       edges.value = diagram.edges || []
       nextNodeId.value = (diagram.nodes.reduce((maxId, node) => Math.max(maxId, parseInt(node.id)), 0) || 0) + 1
     }
-  } 
+  }
 
   function saveDiagram() {
     if (currentDiagram.value) {
@@ -140,7 +141,27 @@ export const useDiagramStore = defineStore('diagram', () => {
   }
   const hideEditNodeModal = () => {
     editingNode.value = null
+    edgeToEdit.value = null
     isEditNodeModalVisible.value = false
+  }
+
+  function showEditEdgeModal(edge) {
+    edgeToEdit.value = edge
+    isEditNodeModalVisible.value = true
+  }
+
+  function updateEdgeLabel(edgeId, label, stereotype) {
+    const edge = edges.value.find(e => e.id === edgeId)
+    console.log("all edges", edges.value)
+    console.log("edge to update", edge)
+    if (edge) {
+      if (!edge.data) edge.data = {}
+      edge.label = label
+      if (typeof stereotype !== 'undefined') {
+        edge.data.stereotype = stereotype
+      }
+      saveDiagram()
+    }
   }
 
   // Initial load
@@ -153,6 +174,7 @@ export const useDiagramStore = defineStore('diagram', () => {
     isNewDiagramModalVisible,
     isEditNodeModalVisible,
     editingNode,
+    edgeToEdit,
     nextNodeId,
 
     // Vue Flow
@@ -167,12 +189,14 @@ export const useDiagramStore = defineStore('diagram', () => {
     saveDiagram,
     deleteDiagram,
     updateNodeLabel,
+    updateEdgeLabel,
     onConnect,
     onNodesChange,
     onEdgesChange,
     showNewDiagramModal,
     hideNewDiagramModal,
     showEditNodeModal,
+    showEditEdgeModal,
     hideEditNodeModal,
     isDiagramNameUnique,
     getNodeId,

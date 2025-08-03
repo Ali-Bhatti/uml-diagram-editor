@@ -2,6 +2,7 @@
   <div class="canvas-area" @drop="onDrop">
     <VueFlow
       v-if="currentDiagram"
+      :key="currentDiagram.id" 
       :nodes="nodes"
       :edges="edges"
       :node-types="nodeTypes"
@@ -10,7 +11,10 @@
       :pan-on-drag="true"
       :zoom-on-scroll="true"
       :zoom-on-pinch="true"
+      fit-view-on-init
       @dragover="onDragOver"
+      @node-double-click="onNodeDoubleClick"
+      @edge-double-click="onEdgeDoubleClick"
     >
       <Background />
       <Controls position="top-left"/>
@@ -124,15 +128,18 @@ function onDrop(event) {
 function onNodeDoubleClick(event) {
   diagramStore.showEditNodeModal(event.node)
 }
+function onEdgeDoubleClick(event) {
+  diagramStore.showEditEdgeModal(event.edge)
+}
 </script>
 
 <style scoped>
-.canvas-area {
+/* .canvas-area {
   width: 100vw;
   height: 100vh;
   position: relative;
   overflow: hidden;
-}
+} */
 .diagram-canvas {
   width: 100%;
   height: 100%;
