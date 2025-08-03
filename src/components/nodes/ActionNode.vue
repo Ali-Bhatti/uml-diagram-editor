@@ -1,24 +1,26 @@
+<script setup>
+import { Handle, Position } from '@vue-flow/core'
+const props = defineProps({ data: Object })
+</script>
+
 <template>
   <div class="action-node">
-    <Handle type="source" :position="Position.Bottom" />
     <Handle type="target" :position="Position.Top" />
-    <span>{{ data.label }}</span>
+    <div class="label">{{ data.label || 'Action' }}</div>
+    <Handle type="source" :position="Position.Bottom" />
   </div>
 </template>
 
-<script setup>
-import { Handle, Position } from '@vue-flow/core'
-
-defineProps(['data'])
-</script>
-
 <style scoped>
 .action-node {
-  padding: 10px 20px;
-  border: 1px solid #333;
-  border-radius: 8px; /* rounded rectangle */
-  background-color: #fff;
+  background: #f0f0f0;
+  padding: 6px 12px;
+  border-radius: 4px;
+  min-width: 80px;
   text-align: center;
-  min-width: 100px;
+  border: 1px solid #333;
+}
+.label {
+  white-space: nowrap;
 }
 </style>

@@ -1,22 +1,23 @@
 <script setup>
 import { Handle, Position } from '@vue-flow/core'
-const props = defineProps({ data: Object })
+defineProps(['data'])
 </script>
 
 <template>
-  <div class="decision-node">
-    <Handle type="target" :position="Position.Top" />
+  <div class="merge-node">
+    <!-- multiple incoming -->
+    <Handle type="target" :position="Position.Left" />
+    <Handle type="target" :position="Position.Right" />
     <div class="diamond">
       <div class="inner-label">{{ data.label || '' }}</div>
     </div>
-    <Handle type="source" :position="Position.Left" />
-    <Handle type="source" :position="Position.Right" />
+    <!-- single outgoing -->
     <Handle type="source" :position="Position.Bottom" />
   </div>
 </template>
 
 <style scoped>
-.decision-node {
+.merge-node {
   position: relative;
   width: 60px;
   height: 60px;

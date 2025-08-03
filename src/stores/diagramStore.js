@@ -9,12 +9,19 @@ export const useDiagramStore = defineStore('diagram', () => {
   const isNewDiagramModalVisible = ref(false)
   const isEditNodeModalVisible = ref(false)
   const editingNode = ref(null)
-  const nextNodeId = ref(1)
+  let nextNodeId = ref(1)
 
   // Vue Flow's state (nodes, edges, etc.)
-  const { nodes, edges, addNodes, addEdges, onConnect, onNodesChange, onEdgesChange, project } = useVueFlow()
+  const { nodes, edges, addEdges, onConnect, onNodesChange, onEdgesChange, project, screenToFlowCoordinate } = useVueFlow()
 
   // Actions
+  function getNodeId() {
+    if (nextNodeId.value === undefined) {
+      nextNodeId.value = 1
+    }
+
+    return `${nextNodeId.value++}`
+  }
   function saveToLocalStorage() {
     localStorage.setItem('uml-diagrams', JSON.stringify(diagrams.value))
   }
@@ -50,18 +57,28 @@ export const useDiagramStore = defineStore('diagram', () => {
     const diagram = diagrams.value.find(d => d.id === id)
     if (diagram) {
       currentDiagram.value = diagram
-      nodes.value = diagram.nodes || []
+      // Sanitize nodes
+      nodes.value = (diagram.nodes || []).map(n => ({
+        id: n.id?.toString() ?? '',
+        type: n.type ?? 'default',
+        position: n.position && typeof n.position.x === 'number' && typeof n.position.y === 'number'
+        ? n.position
+        : { x: 0, y: 0 },
+        data: n.data ?? { label: '' },
+        ...n,
+      }))
       edges.value = diagram.edges || []
       nextNodeId.value = (diagram.nodes.reduce((maxId, node) => Math.max(maxId, parseInt(node.id)), 0) || 0) + 1
     }
-  }
+  } 
 
   function saveDiagram() {
     if (currentDiagram.value) {
       const diagram = diagrams.value.find(d => d.id === currentDiagram.value.id)
       if (diagram) {
-        diagram.nodes = nodes.value
-        diagram.edges = edges.value
+        // Deep clone nodes and edges to avoid saving proxies/reactivity
+        diagram.nodes = JSON.parse(JSON.stringify(nodes.value))
+        diagram.edges = JSON.parse(JSON.stringify(edges.value))
         saveToLocalStorage()
       }
     }
@@ -84,15 +101,10 @@ export const useDiagramStore = defineStore('diagram', () => {
     }
   }
 
-  function addNode(node) {
-    const newNode = {
-      id: nextNodeId.value.toString(),
-      ...node,
-    }
-    addNodes([newNode])
-    nextNodeId.value++
-    saveDiagram()
-  }
+  // function addNode(node) {
+  //   console.log(" addNode in STORE ", node)
+  //   setTimeout(saveDiagram, 100); // Optionally debounce
+  // }
 
   function updateNodeLabel(nodeId, label) {
     const node = nodes.value.find(n => n.id === nodeId)
@@ -109,15 +121,15 @@ export const useDiagramStore = defineStore('diagram', () => {
     saveDiagram()
   })
 
-  onNodesChange((changes) => {
-    // Apply changes to nodes
-    saveDiagram()
-  })
+  // onNodesChange((changes) => {
+  //   // Apply changes to nodes
+  //   saveDiagram()
+  // })
 
-  onEdgesChange((changes) => {
-    // Apply changes to edges
-    saveDiagram()
-  })
+  // onEdgesChange((changes) => {
+  //   // Apply changes to edges
+  //   saveDiagram()
+  // })
 
   // Modal actions
   const showNewDiagramModal = () => { isNewDiagramModalVisible.value = true }
@@ -147,13 +159,13 @@ export const useDiagramStore = defineStore('diagram', () => {
     nodes,
     edges,
     project,
+    screenToFlowCoordinate,
 
     // Actions
     createDiagram,
     loadDiagram,
     saveDiagram,
     deleteDiagram,
-    addNode,
     updateNodeLabel,
     onConnect,
     onNodesChange,
@@ -163,5 +175,6 @@ export const useDiagramStore = defineStore('diagram', () => {
     showEditNodeModal,
     hideEditNodeModal,
     isDiagramNameUnique,
+    getNodeId,
   }
 })

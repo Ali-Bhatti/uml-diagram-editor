@@ -1,20 +1,19 @@
 <template>
-  <div class="canvas-area">
-    <VueFlow 
+  <div class="canvas-area" @drop="onDrop">
+    <VueFlow
       v-if="currentDiagram"
-      v-model:nodes="nodes"
-      v-model:edges="edges"
+      :nodes="nodes"
+      :edges="edges"
       :node-types="nodeTypes"
-      @dragover="onDragOver"
-      @drop="onDrop"
-      @connect="diagramStore.onConnect"
-      @node-double-click="onNodeDoubleClick"
+
       class="diagram-canvas"
-      fit-view-on-init
+      :pan-on-drag="true"
+      :zoom-on-scroll="true"
+      :zoom-on-pinch="true"
+      @dragover="onDragOver"
     >
       <Background />
-      <Controls />
-      <MiniMap />
+      <Controls position="top-left"/>
     </VueFlow>
     <div v-else class="canvas-placeholder">
       <h2>Welcome to the UML Diagram Editor</h2>
@@ -25,53 +24,117 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { VueFlow } from '@vue-flow/core'
+import { markRaw } from 'vue'
+import { VueFlow, useVueFlow } from '@vue-flow/core'
 import { storeToRefs } from 'pinia'
 import { useDiagramStore } from '../stores/diagramStore'
+import { Background } from '@vue-flow/background'
+import { Controls } from '@vue-flow/controls'
+
+// import your custom node components
 import ActorNode from './nodes/ActorNode.vue'
 import UseCaseNode from './nodes/UseCaseNode.vue'
+
 import StartNode from './nodes/StartNode.vue'
 import EndNode from './nodes/EndNode.vue'
 import ActionNode from './nodes/ActionNode.vue'
 import DecisionNode from './nodes/DecisionNode.vue'
-import { Background } from '@vue-flow/background'
-import { Controls } from '@vue-flow/controls'
-import { MiniMap } from '@vue-flow/minimap'
+import ForkNode from './nodes/ForkNode.vue'
+import JoinNode from './nodes/JoinNode.vue'
+import MergeNode from './nodes/MergeNode.vue'
+import SendNode from './nodes/SendNode.vue'
+import AcceptNode from './nodes/AcceptNode.vue'
 
-const nodeTypes = {
-  actor: ActorNode,
-  useCase: UseCaseNode,
-  start: StartNode,
-  end: EndNode,
-  action: ActionNode,
-  decision: DecisionNode,
-}
+const { addNodes, onConnect, addEdges, screenToFlowCoordinate } = useVueFlow();
+
+onConnect((params) => addEdges([params]));
 
 const diagramStore = useDiagramStore()
-const { currentDiagram } = storeToRefs(diagramStore)
-const { nodes, edges } = diagramStore
+const { nodes, edges, currentDiagram } = storeToRefs(diagramStore)
 
-const onDragOver = (event) => {
+
+
+const nodeTypes = {
+  actor: markRaw(ActorNode),
+  useCase: markRaw(UseCaseNode),
+  start: markRaw(StartNode),
+  end: markRaw(EndNode),
+  action: markRaw(ActionNode),
+  decision: markRaw(DecisionNode),
+  fork: markRaw(ForkNode),
+  join: markRaw(JoinNode),
+  merge: markRaw(MergeNode),
+  send: markRaw(SendNode),
+  accept: markRaw(AcceptNode),
+}
+
+function onDragOver(event) {
   event.preventDefault()
   if (event.dataTransfer) {
     event.dataTransfer.dropEffect = 'move'
   }
 }
 
-const onDrop = (event) => {
-  const type = event.dataTransfer?.getData('application/vueflow')
-  if (!type) return
 
-  const position = diagramStore.project({ x: event.clientX, y: event.clientY - 40 })
-  diagramStore.addNode({
-    type,
-    position,
-    label: `${type} node`,
+function onDrop(event) {
+  event.preventDefault()
+  const payload = event.dataTransfer?.getData('application/vueflow')
+  if (!payload) return
+
+  // Parse the payload
+  let type
+  try {
+    type = JSON.parse(payload).type
+  } catch {
+    type = payload // fallback if not JSON
+  }
+
+  // Get position relative to VueFlow
+  const position = screenToFlowCoordinate({
+    x: event.clientX,
+    y: event.clientY
   })
+
+  // Build node object
+  let node = { type, position }
+  const diagramType = currentDiagram.value?.type
+
+  if (diagramType === 'activity') {
+    node.data = {
+      label: type.charAt(0).toUpperCase() + type.slice(1),
+      diagramType: 'activity',
+    }
+  } else {
+    node.data = {
+      label: type.charAt(0).toUpperCase() + type.slice(1),
+    }
+  }
+
+  // get next node ID
+  node.id = diagramStore.getNodeId()
+  //console.log("onDrop node: ", node)
+
+  // Add the node to VueFlow
+  addNodes(node)
+
+  setTimeout(diagramStore.saveDiagram, 100)
 }
+
 
 function onNodeDoubleClick(event) {
   diagramStore.showEditNodeModal(event.node)
 }
 </script>
+
+<style scoped>
+.canvas-area {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+.diagram-canvas {
+  width: 100%;
+  height: 100%;
+}
+</style>

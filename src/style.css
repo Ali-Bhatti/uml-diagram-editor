@@ -1,3 +1,9 @@
+@import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.45.0/dist/style.css';
+@import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.45.0/dist/theme-default.css';
+@import 'https://cdn.jsdelivr.net/npm/@vue-flow/controls@latest/dist/style.css';
+@import 'https://cdn.jsdelivr.net/npm/@vue-flow/minimap@latest/dist/style.css';
+@import 'https://cdn.jsdelivr.net/npm/@vue-flow/node-resizer@latest/dist/style.css';
+
 :root {
   --primary-color: #4f46e5;
   --primary-color-hover: #4338ca;
@@ -14,11 +20,13 @@
 }
 
 /* General Styles */
-body {
+html, body {
   font-family: var(--font-family);
   margin: 0;
+  padding: 0;
   background-color: var(--background-color);
   color: var(--text-primary);
+  height: 100%;
 }
 
 #app-container {
@@ -193,6 +201,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .canvas-placeholder {

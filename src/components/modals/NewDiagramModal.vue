@@ -33,7 +33,7 @@ const type = ref('usecase')
 
 const show = computed(() => diagramStore.showNewDiagramModal)
 
-const create = () => {
+function create() {
   if (!diagramStore.isDiagramNameUnique(name.value)) {
     alert('Diagram name must be unique')
     return

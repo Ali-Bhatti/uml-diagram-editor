@@ -4,18 +4,18 @@ defineProps(['data'])
 </script>
 
 <template>
-  <div class="end-node">
+  <div class="accept-node">
     <!-- only incoming -->
-    <Handle type="target" :position="Position.Top" />
+    <Handle type="target" :position="Position.Left" />
     <svg width="24" height="24" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="10" stroke="black" stroke-width="2" fill="none"/>
-      <circle cx="12" cy="12" r="6" fill="black"/>
+      <path d="M22,12 L6,12 M12,6 L6,12 L12,18"
+            stroke="#333" stroke-width="2" fill="none"/>
     </svg>
   </div>
 </template>
 
 <style scoped>
-.end-node {
+.accept-node {
   display: flex;
   align-items: center;
   justify-content: center;
