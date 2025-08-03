@@ -8,7 +8,7 @@
           <input v-if="isEdge" type="text" id="node-label" v-model="editableNode.label" placeholder="Enter a label" autofocus>
           <input v-else type="text" id="node-label" v-model="editableNode.data.label" placeholder="Enter a label" autofocus>
         </div>
-        <div class="form-group" v-if="isEdge && diagramStore.currentDiagram.type === diagramStore.getDiagramTypes('usecase')">
+        <div class="form-group" v-if="isEdge && diagramStore.currentDiagram.type === DIAGRAM_TYPES['usecase']">
           <label for="stereotype">Stereotype</label>
           <select id="stereotype" v-model="editableNode.data.stereotype">
             <option value="">None</option>
@@ -28,6 +28,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useDiagramStore } from '../../stores/diagramStore'
+import { DIAGRAM_TYPES } from '../../enums'
 
 const diagramStore = useDiagramStore()
 const isEdge = computed(() => !!diagramStore.edgeToEdit)

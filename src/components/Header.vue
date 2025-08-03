@@ -1,6 +1,7 @@
 <template>
   <header class="header">
     <div class="header-left">
+      <img src="/favicon.svg" alt="UML Icon" class="uml-header-icon" />
       <h1>UML Diagram Editor</h1>
       <select v-if="diagrams && diagrams.length" class="diagram-select" :value="currentDiagram ? currentDiagram.id : ''" @change="onDiagramSelect">
         <option :value="null" disabled :selected="!currentDiagram">Select a diagram</option>
@@ -37,3 +38,11 @@ function deleteCurrentDiagram() {
   }
 }
 </script>
+
+<style scoped>
+.uml-header-icon {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+</style>

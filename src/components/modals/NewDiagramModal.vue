@@ -26,21 +26,23 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useDiagramStore } from '../../stores/diagramStore'
+import { DIAGRAM_TYPES } from '../../enums'
 
 const diagramStore = useDiagramStore()
 const name = ref('')
-const type = diagramStore.getDiagramTypes('usecase')
+let type = DIAGRAM_TYPES['usecase']
 
 const show = computed(() => diagramStore.showNewDiagramModal)
 
 function create() {
+  console.log("Creating diagram with name:", name.value, "and type:", type)
   if (!diagramStore.isDiagramNameUnique(name.value)) {
     alert('Diagram name must be unique')
     return
   }
-  diagramStore.createDiagram(name.value, type.value)
+  diagramStore.createDiagram(name.value, type)
   name.value = ''
-  type.value = diagramStore.getDiagramTypes('usecase')
+  type = DIAGRAM_TYPES['usecase'] // Reset to default type
   diagramStore.hideNewDiagramModal()
 }
 </script>

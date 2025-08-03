@@ -11,7 +11,6 @@ export const useDiagramStore = defineStore('diagram', () => {
   const editingNode = ref(null)
   const edgeToEdit = ref(null)
   let nextNodeId = ref(1)
-  const diagramTypes = ref({ activity: 'activity', usecase: 'usecase' })
 
   // Vue Flow's state (nodes, edges, etc.)
   const { nodes, edges, addEdges, onConnect, onNodesChange, onEdgesChange, project, screenToFlowCoordinate } = useVueFlow()
@@ -22,10 +21,6 @@ export const useDiagramStore = defineStore('diagram', () => {
       nextNodeId.value = 1
     }
     return `${nextNodeId.value++}`
-  }
-
-  function getDiagramTypes(type = '') {
-    return diagramTypes.value[type] || Object.keys(diagramTypes.value)
   }
 
   function saveToLocalStorage() {
@@ -224,7 +219,6 @@ export const useDiagramStore = defineStore('diagram', () => {
     isDiagramNameUnique,
     getNodeId,
     removeNode,
-    getDiagramTypes,
     updateDiagramName,
   }
 })
