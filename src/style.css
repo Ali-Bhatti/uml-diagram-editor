@@ -313,3 +313,23 @@ html, body {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
+
+.node-label-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font: inherit;        /* same font-size, weight, family */
+  color: inherit;       /* same color */
+  text-align: center;   /* center text */
+  /* size attribute handles width to match text length */
+}
+
+/* targets the built-in edge label container */
+.vue-flow__edge-text,
+.vue-flow__edge-text > div {
+  background: transparent !important;   /* remove white fill */
+  padding: 0 !important;               /* remove default padding */
+  border-radius: 0 !important;         /* remove rounded corners */
+}

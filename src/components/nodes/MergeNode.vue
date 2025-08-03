@@ -1,6 +1,29 @@
+<!-- src/components/nodes/MergeNode.vue -->
 <script setup>
+import { ref, nextTick } from 'vue'
 import { Handle, Position } from '@vue-flow/core'
-defineProps(['data'])
+import { useDiagramStore } from '../../stores/diagramStore'
+
+const props = defineProps({
+  id: String,
+  data: Object,
+})
+
+const store      = useDiagramStore()
+const isEditing  = ref(false)
+const inputRef   = ref(null)
+
+// Enter edit mode
+function startEdit() {
+  isEditing.value = true
+  nextTick(() => inputRef.value?.focus())
+}
+
+// Commit and exit edit mode
+function finishEdit() {
+  isEditing.value = false
+  store.updateNodeLabel(props.id, props.data.label)
+}
 </script>
 
 <template>
@@ -8,9 +31,25 @@ defineProps(['data'])
     <!-- multiple incoming -->
     <Handle type="target" :position="Position.Left" />
     <Handle type="target" :position="Position.Right" />
-    <div class="diamond">
-      <div class="inner-label">{{ data.label || '' }}</div>
+
+    <!-- diamond with inline edit -->
+    <div class="diamond" @click.stop="startEdit">
+      <input
+        v-if="isEditing"
+        ref="inputRef"
+        v-model="data.label"
+        @keydown.backspace.stop
+        @keydown.delete.stop
+        @blur="finishEdit"
+        @keydown.enter.prevent="finishEdit"
+        :size="Math.max(data.label.length, 1)"
+        class="node-label-input inner-label"
+      />
+      <div v-else class="inner-label node-label">
+        {{ data.label || '' }}
+      </div>
     </div>
+
     <!-- single outgoing -->
     <Handle type="source" :position="Position.Bottom" />
   </div>
@@ -33,7 +72,9 @@ defineProps(['data'])
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: text;
 }
+/* reuse your existing inner-label rotation & font rules */
 .inner-label {
   transform: rotate(-45deg);
   font-size: 10px;

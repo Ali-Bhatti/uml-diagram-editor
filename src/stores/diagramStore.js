@@ -11,6 +11,7 @@ export const useDiagramStore = defineStore('diagram', () => {
   const editingNode = ref(null)
   const edgeToEdit = ref(null)
   let nextNodeId = ref(1)
+  const diagramTypes = ref({activity: 'activity', usecase: 'usecase'})
 
   // Vue Flow's state (nodes, edges, etc.)
   const { nodes, edges, addEdges, onConnect, onNodesChange, onEdgesChange, project, screenToFlowCoordinate } = useVueFlow()
@@ -20,9 +21,13 @@ export const useDiagramStore = defineStore('diagram', () => {
     if (nextNodeId.value === undefined) {
       nextNodeId.value = 1
     }
-
     return `${nextNodeId.value++}`
   }
+
+  function getDiagramTypes(type = '') {
+    return diagramTypes.value[type] || Object.keys(diagramTypes.value)
+  }
+
   function saveToLocalStorage() {
     localStorage.setItem('uml-diagrams', JSON.stringify(diagrams.value))
   }
@@ -100,6 +105,16 @@ export const useDiagramStore = defineStore('diagram', () => {
       }
       saveToLocalStorage()
     }
+  }
+
+  function removeNode(nodeId) {
+    // filter out the node
+    nodes.value = nodes.value.filter(n => n.id !== nodeId)
+    // filter out any edges touching that node
+    edges.value = edges.value.filter(
+      e => e.source !== nodeId && e.target !== nodeId
+    )
+    saveDiagram()
   }
 
   // function addNode(node) {
@@ -200,5 +215,7 @@ export const useDiagramStore = defineStore('diagram', () => {
     hideEditNodeModal,
     isDiagramNameUnique,
     getNodeId,
+    removeNode,
+    getDiagramTypes,
   }
 })

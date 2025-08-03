@@ -22,7 +22,7 @@
     <div class="diagram-info" v-if="currentDiagram">
       <h4>Current Diagram</h4>
       <p><strong>Name:</strong> {{ currentDiagram.name }}</p>
-      <p><strong>Type:</strong> {{ currentDiagram.type }}</p>
+      <p><strong>Type:</strong> {{ utils.capitalizeFirstLetter(currentDiagram.type) }}</p>
     </div>
   </aside>
 </template>
@@ -31,6 +31,7 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDiagramStore } from '../stores/diagramStore'
+import utils from '../utils'
 
 const diagramStore = useDiagramStore()
 const { currentDiagram } = storeToRefs(diagramStore)

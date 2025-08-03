@@ -1,5 +1,9 @@
 <template>
-  <div class="canvas-area" @drop="onDrop">
+  <div class="canvas-area" 
+    @drop="onDrop"
+    tabindex="0"
+    @keydown.delete.prevent="onDelete"
+  >
     <VueFlow
       v-if="currentDiagram"
       :key="currentDiagram.id" 
@@ -48,8 +52,9 @@ import JoinNode from './nodes/JoinNode.vue'
 import MergeNode from './nodes/MergeNode.vue'
 import SendNode from './nodes/SendNode.vue'
 import AcceptNode from './nodes/AcceptNode.vue'
+import utils from '../utils'
 
-const { addNodes, onConnect, addEdges, screenToFlowCoordinate } = useVueFlow();
+const { addNodes, onConnect, addEdges, screenToFlowCoordinate, getSelectedNodes, getSelectedEdges } = useVueFlow();
 
 onConnect((params) => addEdges([params]));
 
@@ -70,6 +75,17 @@ const nodeTypes = {
   merge: markRaw(MergeNode),
   send: markRaw(SendNode),
   accept: markRaw(AcceptNode),
+}
+
+function onDelete() {
+  let selectedNodes = getSelectedNodes.value;
+  if (!selectedNodes?.length === 0) {
+    return
+  }
+  // for simplicity: delete all selected. You could restrict to single-selection if you like.
+  selectedNodes.forEach(node => {
+    diagramStore.removeNode(node.id)
+  })
 }
 
 function onDragOver(event) {
@@ -105,12 +121,12 @@ function onDrop(event) {
 
   if (diagramType === 'activity') {
     node.data = {
-      label: type.charAt(0).toUpperCase() + type.slice(1),
+      label: utils.capitalizeFirstLetter(type),
       diagramType: 'activity',
     }
   } else {
     node.data = {
-      label: type.charAt(0).toUpperCase() + type.slice(1),
+      label: utils.capitalizeFirstLetter(type),
     }
   }
 

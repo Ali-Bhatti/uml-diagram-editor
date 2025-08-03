@@ -29,7 +29,7 @@ import { useDiagramStore } from '../../stores/diagramStore'
 
 const diagramStore = useDiagramStore()
 const name = ref('')
-const type = ref('usecase')
+const type = diagramStore.getDiagramTypes('usecase')
 
 const show = computed(() => diagramStore.showNewDiagramModal)
 
@@ -40,7 +40,7 @@ function create() {
   }
   diagramStore.createDiagram(name.value, type.value)
   name.value = ''
-  type.value = 'usecase'
+  type.value = diagramStore.getDiagramTypes('usecase')
   diagramStore.hideNewDiagramModal()
 }
 </script>
