@@ -37,13 +37,13 @@ export const ACTIVITY_NODE_TYPES = [
       type: 'send',
       label: 'Send',
       svg:
-        '<path d="M2,12 L18,12 M12,6 L18,12 L12,18" stroke="#333" stroke-width="2" fill="none"/>'
+        '<polygon points="2,4 17,4 22,12 17,20 2,20" fill="#fff" stroke="#333" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="miter" />'
     },
     {
       type: 'accept',
       label: 'Accept',
       svg:
-        '<path d="M22,12 L6,12 M12,6 L6,12 L12,18" stroke="#333" stroke-width="2" fill="none"/>'
+        '<polygon points="22,4 22,20 2,20 8,12 2,4" fill="#fff" stroke="#333" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="miter" />'
     },
     {
       type: 'end',
