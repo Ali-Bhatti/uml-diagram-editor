@@ -10,8 +10,8 @@
         <div class="form-group">
           <label for="diagram-type">Diagram Type</label>
           <select id="diagram-type" v-model="type">
-            <option value="usecase">Use Case Diagram</option>
             <option value="activity">Activity Diagram</option>
+            <option value="usecase">Use Case Diagram</option>
           </select>
         </div>
         <div class="form-actions">
@@ -30,7 +30,7 @@ import { DIAGRAM_TYPES } from '../../enums'
 
 const diagramStore = useDiagramStore()
 const name = ref('')
-let type = DIAGRAM_TYPES['usecase']
+let type = DIAGRAM_TYPES['activity']
 
 const show = computed(() => diagramStore.showNewDiagramModal)
 

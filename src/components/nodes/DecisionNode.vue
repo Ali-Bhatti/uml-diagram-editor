@@ -28,8 +28,17 @@ function finishEdit() {
 
 <template>
   <div class="decision-node">
-    <!-- multiple incoming -->
-    <Handle type="target" :position="Position.Top" />
+    <!-- targets (incoming) -->
+    <Handle type="target" :position="Position.Top"    id="t-top" class="nodrag nopan" />
+    <Handle type="target" :position="Position.Right"  id="t-right" class="nodrag nopan" />
+    <Handle type="target" :position="Position.Bottom" id="t-bottom" class="nodrag nopan" />
+    <Handle type="target" :position="Position.Left"   id="t-left" class="nodrag nopan" />
+
+    <!-- sources (outgoing) -->
+    <Handle type="source" :position="Position.Top"    id="s-top" class="nodrag nopan" />
+    <Handle type="source" :position="Position.Right"  id="s-right" class="nodrag nopan" />
+    <Handle type="source" :position="Position.Bottom" id="s-bottom" class="nodrag nopan" />
+    <Handle type="source" :position="Position.Left"   id="s-left" class="nodrag nopan" />
 
     <!-- diamond with inline edit -->
     <div class="diamond" @click.stop="startEdit">
@@ -48,11 +57,6 @@ function finishEdit() {
         {{ data.label || '' }}
       </div>
     </div>
-
-    <!-- multiple outgoing -->
-    <Handle type="source" :position="Position.Left" />
-    <Handle type="source" :position="Position.Right" />
-    <Handle type="source" :position="Position.Bottom" />
   </div>
 </template>
 

@@ -28,9 +28,14 @@ function finishEdit() {
 
 <template>
   <div class="merge-node">
-    <!-- multiple incoming -->
-    <Handle type="target" :position="Position.Left" />
-    <Handle type="target" :position="Position.Right" />
+    <!-- multiple incoming (all sides) -->
+    <Handle type="target" :position="Position.Top"    id="t-top" />
+    <Handle type="target" :position="Position.Right"  id="t-right" />
+    <Handle type="target" :position="Position.Bottom" id="t-bottom" />
+    <Handle type="target" :position="Position.Left"   id="t-left" />
+
+    <!-- single outgoing -->
+    <Handle type="source" :position="Position.Bottom" id="s-bottom" />
 
     <!-- diamond with inline edit -->
     <div class="diamond" @click.stop="startEdit">
@@ -49,9 +54,6 @@ function finishEdit() {
         {{ data.label || '' }}
       </div>
     </div>
-
-    <!-- single outgoing -->
-    <Handle type="source" :position="Position.Bottom" />
   </div>
 </template>
 

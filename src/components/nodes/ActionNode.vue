@@ -22,7 +22,17 @@ function finishEdit() {
 
 <template>
   <div class="action-node">
-    <Handle type="target" :position="Position.Top" />
+    <!-- Four incoming handles -->
+    <Handle type="target" :position="Position.Top"    id="target-top"    class="nodrag nopan" />
+    <Handle type="target" :position="Position.Right"  id="target-right"  class="nodrag nopan" />
+    <Handle type="target" :position="Position.Bottom" id="target-bottom" class="nodrag nopan" />
+    <Handle type="target" :position="Position.Left"   id="target-left"   class="nodrag nopan" />
+
+    <!-- Four outgoing handles -->
+    <Handle type="source" :position="Position.Top"    id="source-top"    class="nodrag nopan" />
+    <Handle type="source" :position="Position.Right"  id="source-right"  class="nodrag nopan" />
+    <Handle type="source" :position="Position.Bottom" id="source-bottom" class="nodrag nopan" />
+    <Handle type="source" :position="Position.Left"   id="source-left"   class="nodrag nopan" />
 
     <div class="label-container nodrag" @click.stop="startEdit">
       <input
@@ -38,8 +48,6 @@ function finishEdit() {
       />
       <span v-else class="node-label">{{ data.label || 'Action' }}</span>
     </div>
-
-    <Handle type="source" :position="Position.Bottom" />
   </div>
 </template>
 
