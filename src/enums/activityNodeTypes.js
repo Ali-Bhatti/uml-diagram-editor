@@ -9,7 +9,7 @@ export const ACTIVITY_NODE_TYPES = [
       type: 'action',
       label: 'Action',
       svg:
-        '<rect x="4" y="6" width="16" height="12" rx="4" fill="#f0f0f0" stroke="#333"/>'
+        '<rect x="4" y="6" width="16" height="12" rx="4" fill="#ffffff" stroke="#333"/>'
     },
     {
       type: 'decision',

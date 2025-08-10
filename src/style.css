@@ -333,3 +333,7 @@ html, body {
   padding: 0 !important;               /* remove default padding */
   border-radius: 0 !important;         /* remove rounded corners */
 }
+
+.node-color {
+  background-color: var(--surface-color);
+}
