@@ -26,12 +26,20 @@ export const ACTIVITY_NODE_TYPES = [
     {
       type: 'fork',
       label: 'Fork',
-      svg: '<rect x="4" y="10" width="16" height="4" fill="#333"/>'
+      svg:
+        // bar + three tiny ticks BELOW
+        '<rect x="3" y="9" width="18" height="6" rx="1" fill="#333"/>' +
+        '<path d="M6 16v4 M12 16v4 M18 16v4" ' +
+        'stroke="#333" stroke-width="2" vector-effect="non-scaling-stroke"/>'
     },
     {
       type: 'join',
       label: 'Join',
-      svg: '<rect x="4" y="10" width="16" height="4" fill="#333"/>'
+      svg:
+        // bar + three tiny ticks ABOVE
+        '<rect x="3" y="9" width="18" height="6" rx="1" fill="#333"/>' +
+        '<path d="M6 8v-4 M12 8v-4 M18 8v-4" ' +
+        'stroke="#333" stroke-width="2" vector-effect="non-scaling-stroke"/>'
     },
     {
       type: 'send',

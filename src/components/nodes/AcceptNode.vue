@@ -39,7 +39,10 @@ function openModal() {
 
     <!-- IN (left) / OUT (right) -->
     <Handle type="target" :position="Position.Left"  id="t-left" />
+    <Handle type="target" :position="Position.Top"    id="t-top" />
+
     <Handle type="source" :position="Position.Right" id="s-right" />
+    <Handle type="source" :position="Position.Bottom" id="s-bottom" />
 
     <!-- scalable concave polygon; left notch -->
     <svg class="accept-svg" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">

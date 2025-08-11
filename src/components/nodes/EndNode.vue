@@ -16,13 +16,11 @@ defineProps({ id: String, data: Object, selected: Boolean })
       :handleStyle="{ fill: '#333' }"
     />
 
-    <!-- single IN, top-centered -->
-    <Handle
-      type="target"
-      :position="Position.Top"
-      id="t-top"
-      :style="{ left: '50%' }"
-    />
+    <!-- 4-direction IN -->
+    <Handle type="target" :position="Position.Top"    id="t-top"    :style="{ left: '50%' }" />
+    <Handle type="target" :position="Position.Bottom" id="t-bottom" :style="{ left: '50%' }" />
+    <Handle type="target" :position="Position.Left"   id="t-left"   :style="{ top:  '50%' }" />
+    <Handle type="target" :position="Position.Right"  id="t-right"  :style="{ top:  '50%' }" />
 
     <!-- scalable bullseye -->
     <div class="ring"></div>
@@ -57,16 +55,36 @@ defineProps({ id: String, data: Object, selected: Boolean })
   border-radius: 50%;
 }
 
-/* keep top handle glued to circle’s top edge */
+/* Make resizer overlay click-through; handles stay clickable */
+:deep(.vue-flow__resizer) { pointer-events: none; }
+:deep(.vue-flow__resize-control) { pointer-events: auto; }
+
+/* Keep handle dots above graphics */
 :deep(.vue-flow__handle) { z-index: 2; }
+
+/* Place handles exactly on the circle’s extremes (like Start) */
 :deep(.vue-flow__handle-top) {
   left: 50% !important;
-  top: calc(50% - 51%) !important;  /* mirror of your Start node’s +51% */
+  top:  calc(50% - 51%) !important;   /* just above center by ~radius */
   bottom: auto !important;
   transform: translate(-50%, -50%) !important;
 }
-
-/* resizer overlay shouldn’t block clicks; handles stay clickable */
-:deep(.vue-flow__resizer) { pointer-events: none; }
-:deep(.vue-flow__resize-control) { pointer-events: auto; }
+:deep(.vue-flow__handle-bottom) {
+  left: 50% !important;
+  top:  calc(50% + 51%) !important;   /* just below center by ~radius */
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+}
+:deep(.vue-flow__handle-left) {
+  top: 50% !important;
+  left: calc(50% - 51%) !important;   /* left of center by ~radius */
+  right: auto !important;
+  transform: translate(-50%, -50%) !important;
+}
+:deep(.vue-flow__handle-right) {
+  top: 50% !important;
+  left: calc(50% + 51%) !important;   /* right of center by ~radius */
+  right: auto !important;
+  transform: translate(-50%, -50%) !important;
+}
 </style>
