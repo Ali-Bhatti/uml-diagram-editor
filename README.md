@@ -32,6 +32,9 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+### Image
+<img width="1493" height="817" alt="image" src="https://github.com/user-attachments/assets/e5f65739-deaa-460b-9a93-fbdd925e80f1" />
+
 ## Project Structure
 - `src/components/` – Vue components (Palette, DiagramCanvas, Header, modals, nodes)
 - `src/stores/diagramStore.js` – Pinia store for state management
